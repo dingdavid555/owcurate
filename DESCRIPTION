@@ -11,6 +11,7 @@ LazyData: true
 Depends: 
     R (>= 3.6.0)
 Imports:
-    GENEAread (>= 2.0.6),
     ggplot2 (>= 3.2.0),
     shiny (>= 1.3.2)
+    # owfiler - this package is only on github so not sure how to import here but
+    #           it must be installed to open files
