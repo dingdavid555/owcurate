@@ -5,7 +5,7 @@ read_ga_bin <- function(binfile = file.choose(), ...) {
   ga_bin <- GENEAread::read.bin(binfile = binfile, ...)
 
   #replace header with more complete custom header
-  ga_bin$header <- read_ga_header(binfile)
+  ga_bin$header <- owcurate::read_ga_header(binfile)
 
   ga_bin
 
