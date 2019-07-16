@@ -8,7 +8,7 @@ server <- function(input, output) {
   plotLineSize = 0.07
 
   # Load .bin GeneActiv file with a downsample of 3 on 75hz resulting in a frequency of 25hz
-  binFile = owfiler::read_ga_bin(file.choose(), downsample = 3)
+  binFile = read_ga_bin(file.choose(), downsample = 3)
 
   # ACTION BUTTON FUNCTION
   v <- reactiveValues(start = 0, end = hourSampled*secToHours)

@@ -1,17 +1,16 @@
-Package: owcheckr
-Title: ONDRI wearable device raw data integrity checker
+Package: owcurate
+Title: ONDRI wearable device data curation 
 Version: 0.0.0.9000
-Authors@R: c(person("Kit", "Beyer", email = "kbeyer@uwaterloo.ca", role = c("aut", "cre")),
-             person("Allan", "Liang", email = "a33liang@edu.uwaterloo.ca", role = c("aut")))
-Description: Checks the integrity of file characteristics and signal quality for raw data files
-    taken from wearable devices used in the ONDRI@Home project. Current devices include the GENEActiv 
-    Original actigraph and Bittium Faros 360 ECG.
+Authors@R: c(person("Kit", "Beyer", email = "kit.beyer@uwaterloo.ca", role = c("aut", "cre")),
+             person("Allan", "Liang", email = "a33liang@edu.uwaterloo.ca", role = c("aut")),
+             person("Kyle", "Weber", email = "kyle.weber@uwaterloo.ca", role = c("aut")),
+             person("Ben", "Cornish", email = "benjamin.cornish@uwaterloo.ca", role = c("aut")))
+Description: Collection of tools for the curation of wearable device data used in ONDRI@Home.
 License: GPL-3
 LazyData: true
 Depends: 
     R (>= 3.6.0)
 Imports:
+    GENEAread (>= 2.0.6),
     ggplot2 (>= 3.2.0),
     shiny (>= 1.3.2)
-    # owfiler - this package is only on github so not sure how to import here but
-    #           it must be installed to open files

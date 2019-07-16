@@ -3,11 +3,10 @@
 #The first plot controls the rest of the graphs by allowing you to zoom in and drag around the highlighted box, double click the first graph to exit the zoom
 #Toggle between graphs by clicking next graph
 
-
 ga_vis <- function() {
 
   # get app directory for ga-vis shiny app
-  app_dir <- system.file("ga-vis", package = "owcheckr")
+  app_dir <- system.file("ga-vis", package = "owcurate")
 
   # run ga-vis shiny app
   shiny::runApp(app_dir, display.mode = "normal")
