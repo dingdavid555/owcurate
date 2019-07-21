@@ -1,9 +1,4 @@
 
-# Is it necessary to create png files or can they be loaded into pdf directly?
-# datetime variable: can it replace the date column?
-# convert raw.data to some standard format? how do we accomaodate multiple file types (edf)
-# front facing functino 
-
 basename.diff <- function(indir, outdir){
   
   # FUNCTION DESCRIPTION
