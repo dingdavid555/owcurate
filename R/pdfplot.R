@@ -47,7 +47,7 @@ pdfplot <- function(file, pdfdir, downsample, window.len) {
   t1 <- Sys.time()
   
   processing.time <- difftime(time1=t1, time2=t0, units="auto")
-  print(sprintf("Total processing time was %s seconds.", round(as.numeric(processing.time, units="secs")), 1))
+  cat(sprintf("Total processing time was %s seconds.", round(as.numeric(processing.time, units="secs")), 1))
 
 }
 
@@ -75,12 +75,10 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
   # start timer
   t0 <- Sys.time()
 
-  print(" ")
-  print(" ")
-  print("===============================================================================")
-  print("===============================================================================")
-  print(" ")
-  print(sprintf("Importing %s.", file))
+  cat("===============================================================================")
+  cat("===============================================================================")
+  cat(" ")
+  cat(sprintf("Importing %s.", file))
 
   
   # Reads in raw binary file
@@ -101,8 +99,8 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
   # temp_data <- raw.data$data.out[ , 7]
 
   # ----------------------------------------------- PNG FILE PREP ----------------------------------------------
-  print(" ")
-  print(sprintf("Creating PNGs with window size of %s hours", window.len))
+
+  cat(sprintf("Creating PNGs with window size of %s hours", window.len))
   
   # Converts window.size from hours to number of data points
   window.length.index <- window.len * 60 * 60 * raw.data$freq
@@ -194,9 +192,7 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
   }
   
   # Prints how many PNGs were created once finished
-  print(" ")
-  print(sprintf("Created %s PNG files.", window.num))
-  print(" ")
+  cat(sprintf("Created %s PNG files.", window.num))
   
   # ------------------------------------------- PDF CREATION ----------------------------------------------------
   
@@ -231,7 +227,7 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
   # Closes PDF
   dev.off()
   
-  print(sprintf("Created PDF file as %s.pdf.", file.base))
+  cat(sprintf("Created PDF file as %s.pdf.", file.base))
   
   # Deletes the PNG files
   unlink(png.files)
@@ -243,7 +239,8 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
   t1 <- Sys.time()
   
   processing.time <- difftime(time1=t1, time2=t0, units="auto")
-  print(sprintf("File processing time was %s seconds.", round(as.numeric(processing.time, units="secs")), 1))
+  cat(sprintf("File processing time was %s seconds.", round(as.numeric(processing.time, units="secs")), 1))
+  cat(" ")
 
   
 }
