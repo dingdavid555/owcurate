@@ -33,28 +33,34 @@ basename.diff <- function(indir, outdir){
 
 pdfplot <- function(file, pdfdir, downsample, window.len) {
 
+  # Plots data from a single file or all unprocessed files in a folder as a pdf file.
+
   # start timer
   t0 <- Sys.time()
 
   # if file is a folder, replace with a list of files that have not
   # already been processed.
   if (file_test("-d", file)) { file <- basename.diff(file, pdfdir) }
+ 
 
+  i <- 0
   # plot each file as a pdf
-  for (f in file) { pdfplot_ga(f, pdfdir, downsample, window.len) }
+  for (f in file) { 
+    
+    i <- i + 1
+    cat("== Processing file ", i, " of ", length(file), " ==========\n", sep = "")  
+
+    pdfplot_ga(f, pdfdir, downsample, window.len) 
+
+  }
 
   # End timer
   t1 <- Sys.time()
   
   processing.time <- difftime(time1=t1, time2=t0, units="auto")
-  cat(sprintf("Total processing time was %s seconds.", round(as.numeric(processing.time, units="secs")), 1))
+  cat(sprintf("Total processing time was %s seconds.", round(as.numeric(processing.time, units="secs")), 1), "\n")
 
 }
-
-# ---------------------------------------------------------------------------------------------------------------
-# ---------------------------------------- PLOTTING DATA, CREATE PDF --------------------------------------------
-# ---------------------------------------------------------------------------------------------------------------
-
 
 
 pdfplot_ga <- function(file, pdfdir, downsample, window.len){
@@ -75,12 +81,8 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
   # start timer
   t0 <- Sys.time()
 
-  cat("===============================================================================")
-  cat("===============================================================================")
-  cat(" ")
-  cat(sprintf("Importing %s.", file))
-
-  
+  cat(sprintf("Reading %s.", file), "\n")
+ 
   # Reads in raw binary file
   # Downsamples by downsample.ratio
   raw.data <- owfiler::read_ga_bin(binfile=file, verbose=TRUE, do.temp=TRUE, downsample=downsample)
@@ -100,7 +102,7 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
 
   # ----------------------------------------------- PNG FILE PREP ----------------------------------------------
 
-  cat(sprintf("Creating PNGs with window size of %s hours", window.len))
+  cat(sprintf("Creating PNGs with window size of %s hours", window.len), "\n")
   
   # Converts window.size from hours to number of data points
   window.length.index <- window.len * 60 * 60 * raw.data$freq
@@ -192,7 +194,7 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
   }
   
   # Prints how many PNGs were created once finished
-  cat(sprintf("Created %s PNG files.", window.num))
+  cat(sprintf("Created %s PNG files.", window.num), "\n")
   
   # ------------------------------------------- PDF CREATION ----------------------------------------------------
   
@@ -227,7 +229,7 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
   # Closes PDF
   dev.off()
   
-  cat(sprintf("Created PDF file as %s.pdf.", file.base))
+  cat(sprintf("Created PDF file as %s.pdf.", file.base), "\n")
   
   # Deletes the PNG files
   unlink(png.files)
@@ -239,8 +241,8 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
   t1 <- Sys.time()
   
   processing.time <- difftime(time1=t1, time2=t0, units="auto")
-  cat(sprintf("File processing time was %s seconds.", round(as.numeric(processing.time, units="secs")), 1))
-  cat(" ")
+  cat(sprintf("File processing time was %s seconds.", round(as.numeric(processing.time, units="secs")), 1), "\n")
+  cat("\n")
 
   
 }
