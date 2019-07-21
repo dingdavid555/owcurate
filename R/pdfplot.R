@@ -85,7 +85,7 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
  
   # Reads in raw binary file
   # Downsamples by downsample.ratio
-  raw.data <- owfiler::read_ga_bin(binfile=file, verbose=TRUE, do.temp=TRUE, downsample=downsample)
+  raw.data <- owcurate::read_ga_bin(binfile=file, verbose=TRUE, do.temp=TRUE, downsample=downsample)
   
   # Formats timestamps from unix time
   datetime <- as.POSIXct(raw.data$data.out[ , 1], origin="1970-01-01")
