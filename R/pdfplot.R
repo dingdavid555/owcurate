@@ -35,16 +35,21 @@ pdfplot <- function(file, pdfdir, downsample, window.len) {
 
   # if file is a folder, replace with a list of files that have not
   # already been processed.
-  if (file_test("-d", file)) { file <- basename.diff(file, pdfdir) }
+  if (file_test("-d", file)) { 
+    file <- basename.diff(file, pdfdir) 
+  }
  
-
+  # initialize loop counter
   i <- 0
-  # plot each file as a pdf
+
+  # loop through all files to plot as pdf
   for (f in file) { 
-    
+  
+    # increment loop counter and display message
     i <- i + 1
     cat("== Processing file ", i, " of ", length(file), " ==========\n", sep = "")  
 
+    # plot current file as a pdf
     pdfplot_ga(f, pdfdir, downsample, window.len) 
 
   }
@@ -52,6 +57,7 @@ pdfplot <- function(file, pdfdir, downsample, window.len) {
   # End timer
   t1 <- Sys.time()
   
+  # display processing time message
   processing.time <- difftime(time1=t1, time2=t0, units="auto")
   cat(sprintf("Total processing time was %s seconds.", round(as.numeric(processing.time, units="secs")), 1), "\n")
 
@@ -76,24 +82,17 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
   # start timer
   t0 <- Sys.time()
 
+  # display message
   cat(sprintf("Reading %s.", file), "\n")
  
-  # Reads in raw binary file
-  # Downsamples by downsample.ratio
+  # Read in raw GENEActiv binary file
   raw.data <- owcurate::read_ga_bin(binfile=file, verbose=TRUE, do.temp=TRUE, downsample=downsample)
   
-  # Formats timestamps from unix time
+  # Format timestamps from unix time
   datetime <- as.POSIXct(raw.data$data.out[ , 1], origin="1970-01-01")
 
+  # save file name without extension
   file.base <- tools::file_path_sans_ext(basename(file))
-  # Data contained in each column: not used
-  # timestamps <- raw.data$data.out[ ,1]
-  # accel_x <- raw.data$data.out[ , 2]
-  # accel_y <- raw.data$data.out[ , 3]
-  # accel_z <- raw.data$data.out[ , 4]
-  # lux <- raw.$data.out[ , 5]
-  # button <- raw.data$data.out[ , 6]
-  # temp_data <- raw.data$data.out[ , 7]
 
   # ----------------------------------------------- PNG FILE PREP ----------------------------------------------
 
@@ -239,7 +238,6 @@ pdfplot_ga <- function(file, pdfdir, downsample, window.len){
   cat(sprintf("File processing time was %s seconds.", round(as.numeric(processing.time, units="secs")), 1), "\n")
   cat("\n")
 
-  
 }
 
 
