@@ -152,31 +152,31 @@ read_edf <- function(infile = file.choose()) {
     cat("Reading header...\n", sep = "")
 
     # read header
-    header_packet <- read_edf_header(infile)
+    header_packet <- owcurate::read_edf_header(infile)
 
     cat("Parsing header...\n", sep = "")
 
     # parse header packet into keys and values 
-    header <- c(list(filename = infile), parse_edf_header(header_packet))
+    header <- c(list(filename = infile), owcurate::parse_edf_header(header_packet))
 
     cat("Reading data...\n", sep = "")
 
     # read data
-    data_packet <- read_edf_data(infile, 
-                                 num_records = as.numeric(header$num_records),
-                                 num_signals = as.numeric(header$num_signals),
-                                 sig_record_samples = as.numeric(header$sig_record_samples))
+    data_packet <- owcurate::read_edf_data(infile, 
+                                           num_records = as.numeric(header$num_records),
+                                           num_signals = as.numeric(header$num_signals),
+                                           sig_record_samples = as.numeric(header$sig_record_samples))
 
     cat("Parsing data...\n", sep = "")
 
     # parse data packet into signal data
-    data <- parse_edf_data(data_packet,
-                           sig_labels = trimws(header$sig_labels), 
-                           sig_record_samples = as.numeric(header$sig_record_samples),
-                           sig_phys_max = as.numeric(header$sig_phys_max),
-                           sig_phys_min = as.numeric(header$sig_phys_min),
-                           sig_dig_max = as.numeric(header$sig_dig_max),
-                           sig_dig_min = as.numeric(header$sig_dig_min))
+    data <- owcurate::parse_edf_data(data_packet,
+                                     sig_labels = trimws(header$sig_labels), 
+                                     sig_record_samples = as.numeric(header$sig_record_samples),
+                                     sig_phys_max = as.numeric(header$sig_phys_max),
+                                     sig_phys_min = as.numeric(header$sig_phys_min),
+                                     sig_dig_max = as.numeric(header$sig_dig_max),
+                                     sig_dig_min = as.numeric(header$sig_dig_min))
 
     list(header = header, data = data)
 
