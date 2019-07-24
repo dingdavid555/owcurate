@@ -1,5 +1,5 @@
 export(pdfplot)
-edport(read_edf)
+export(read_edf)
 export(read_ga_bin)
 export(read_ga_header)
 export(vis_ga)
