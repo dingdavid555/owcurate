@@ -19,7 +19,7 @@ style.use("ggplot")
 path = input("Please enter working path: ")
 RAW_DATA = "\\Raw data\\GENEActiv\\"
 REDCAP_PATH = "\\Raw data\\REDCap\\"
-OUTPUT_PATH = "\\Processed Data\\PDF Summary\\"
+OUTPUT_PATH = "\\Processed Data\\GENEActiv\\PDF Summary\\"
 working_dir = path + RAW_DATA
 files = [f for f in listdir(path+RAW_DATA) if (isfile(join(working_dir, f)) and (".bin" in f) and not ("SAMPLE" in f))]
 

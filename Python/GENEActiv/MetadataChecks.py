@@ -28,7 +28,7 @@ def process_location(str1, str2):
 path = input("Please enter the file path: ")
 in_path = '\\Raw data\\GENEActiv\\'
 origin = path + in_path
-out_path = "\\Processed Data\\"
+out_path = "\\Processed Data\\GENEActiv\\"
 destination = path + out_path
 REDCap_dir = "\\Raw data\\REDCap\\"
 
@@ -39,19 +39,20 @@ curr_file_info = None
 
 try:
     with open(destination + "Summary.csv") as file:
-        summary_df = pd.read_csv(file, names=["Subject ID", "FileNameTest", "Frequency Test",
-                                              "Page Count Test", "Location Test", "Notes"], header=0)
+        summary_df = pd.read_csv(file, names=["Index", "Subject ID", "FileNameTest", "Frequency Test",
+                                              "Page Count Test", "Location Test", "Notes"],
+                                 header=0, index_col=["Index"])
 except IOError:
     with open(destination+"Summary.csv", 'w') as file:
-        file.write("Subject ID,File Name Test,Frequency Test,Page Count Test,Location Test,Notes\n")
+        file.write("Index,Subject ID,File Name Test,Frequency Test,Page Count Test,Location Test,Notes\n")
     summary_df = pd.DataFrame(columns=["Subject ID", "FileNameTest", "Frequency Test",
-                                       "Page Count Test", "Location Test", "Notes"])
+                                       "Page Count Test", "Location Test", "Notes"], index=["Index"])
 
 # ================ CONSTANTS TO CHECK AGAINST
 MEASUREMENT_FREQUENCY = 75
 
 
-REDCap_files = [f for f in listdir(path+ REDCap_dir) if isfile(join(path + REDCap_dir, f))]
+REDCap_files = [f for f in listdir(path + REDCap_dir) if isfile(join(path + REDCap_dir, f))]
 df_Baseline = pd.read_csv(path + REDCap_dir + REDCap_files[0])
 df_Discharge = pd.read_csv(path + REDCap_dir + REDCap_files[0])
 
@@ -110,7 +111,7 @@ for f in files_to_check:
     summary_df.loc[len(summary_df)] = output_array
     print(output_array)
 
-summary_df.duplicated(subset=None, keep='last')
+summary_df.duplicated(subset=["Subject ID"], keep='last')
 
 remove(destination+"Summary.csv")
 
