@@ -4,11 +4,9 @@
 # WORK IN PROGRESS
 
 # ======================================== IMPORTS =============================
-from owcurate.Python.GENEActivReader import *
-import numpy as np
+from owcurate.Python.GENEActiv.GENEActivReader import *
 import pandas as pd
-from statistics import mean, variance, stdev
-from os import listdir, mkdir, remove
+from os import listdir, remove
 from os.path import isfile, join
 
 
