@@ -282,12 +282,12 @@ class GENEActivFileName:
     location: str
 
     def __init__(self, f):
-        arr = f.split("_")
-        self.study = arr[0][-5:]
-        self.site = arr[1]
-        self.subject_code = int(arr[2])
-        self.visitNum = int(arr[3])
-        self.location = arr[len(arr)-1][:-4]
+        self.arr = f.split("_")
+        self.study = self.arr[0][-5:]
+        self.site = self.arr[1]
+        self.subject_code = int(self.arr[2])
+        self.visitNum = int(self.arr[3])
+        self.location = self.arr[len(self.arr)-1][:-4]
 
 
 # ============================= DEFINITIONS
