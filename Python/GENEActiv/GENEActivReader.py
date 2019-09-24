@@ -262,6 +262,10 @@ class ReadGENEActivBin:
                           self.fileInfo.volts, self.fileInfo.lux]
         self.actual_page_count = get_last_sequence_num(self.file_instance_2)
         self.DataChunk = []
+        self.x_channel = []
+        self.y_channel = []
+        self.z_channel = []
+        self.temperatures = []
         self.curr_line = self.file.readline()
         for i in range(self.actual_page_count):
             curr_data_chunk = Data(self.file)
@@ -273,6 +277,19 @@ class ReadGENEActivBin:
 
         self.df = pd.DataFrame(data=self.DataChunk, columns=["Device Serial Code", "Sequence Number", "Page Time",
                                                              "Temperature", "Hexadecimal Data"])
+
+    def parse_hex(self):
+        for j, k in self.df.iterrows():
+            curr_chunk = process_curr(k["Hexadecimal Data"], "", k["Sequence Number"], k["Page Time"],
+                                      (self.fileInfo.x_offset, self.fileInfo.y_offset, self.fileInfo.z_offset),
+                                      (self.fileInfo.x_gain, self.fileInfo.y_gain, self.fileInfo.z_gain))
+
+            self.temperatures.append(k["Temperature"])
+            for i in range(300):
+                self.x_channel.append(curr_chunk[i][2])
+                self.y_channel.append(curr_chunk[i][3])
+                self.z_channel.append(curr_chunk[i][4])
+                # print("%.5f%% done" % (k["Sequence Number"] * 100 / self.fileInfo.number_of_pages))
 
 
 class GENEActivFileName:
@@ -360,7 +377,7 @@ def process_curr(x, output, iter, time, offsets, gains, write_to_file=False):
         y_comp = (y_comp * 100 - y_offset) / y_gain
         z_comp = (z_comp * 100 - z_offset) / z_gain
         # update the time value based on 75Hz roughly (1000ms/75)
-        time += timedelta(milliseconds=13.3333)
+        time = time + timedelta(milliseconds=13.3333)
 
         if write_to_file:
             output_string = "%i, " % (iter * 300 + j) + time.strftime("%Y-%m-%d %H:%M:%S.%f") + ", %.3f, %.3f, %.3f\n" % (x_comp, y_comp, z_comp)
