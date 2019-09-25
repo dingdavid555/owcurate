@@ -4,7 +4,7 @@
 
 import pandas as pd
 import numpy as np
-from owcurate.Python.GENEActiv.GENEActivReader import *
+from Python.GENEActiv.GENEActivReader import *
 import matplotlib.pyplot as plt
 from matplotlib import style
 import math
@@ -14,15 +14,15 @@ WINDOWS = 5
 
 
 def zip_channels(x_channel, y_channel, z_channel):
-    output_arr= []
+    output_arr = []
     for i in range(len(x_channel)):
         output_arr.append((x_channel[i], y_channel[i], z_channel[i]))
     return output_arr
 
 
-def stdevs(x_channel, y_channel, z_channel, sample_size=75):
+def stdevs(x_channel, y_channel, z_channel, sample_size=1125):
     output_arr = []
-    for i in range(len(x_channel)//75):
+    for i in range(len(x_channel)//sample_size):
         output_arr.append((statistics.stdev(x_channel[sample_size * i:sample_size * (i+1)]),
                            statistics.stdev(y_channel[sample_size * i:sample_size * (i+1)]),
                            statistics.stdev(z_channel[sample_size * i:sample_size * (i+1)])))
@@ -63,7 +63,7 @@ def error_correct_stationary(movements, window):
         if output_array[i].count(0) >= 0.75 * len(output_array[i]):
             output_array[i] = 0
         else:
-            output_array = 1
+            output_array[i] = 1
         # output_array[i] = statistics.mean(output_array[i])
 
     return output_array
@@ -72,14 +72,41 @@ def error_correct_stationary(movements, window):
 # This returns an array of length
 def start_end_times(arr_data):
     # TODO: THIS FUNCTION
-    return 0
+    output_arr = []
+
+    curr_start_index = 0
+    currently_stationary = False
+    for i in range(len(arr_data)):
+        if arr_data[i] == 0 and not currently_stationary:
+            currently_stationary = True
+            curr_start_index = i
+
+        if arr_data[i] == 1 and currently_stationary:
+            output_arr.append([curr_start_index, i])
+            curr_start_index = 0
+            currently_stationary = False
+
+    return output_arr
 
 
 def pre_process(bin_file):
     bin_file.parse_hex()
     triaxial_stdev = stdevs(bin_file.x_channel, bin_file.y_channel, bin_file.z_channel)
     single_stdev = collapse_stdevs(triaxial_stdev)
-    return error_correct_stationary(single_stdev)
+    return error_correct_stationary(single_stdev, 20)
+
+
+file = "/Volumes/nimbal$/Data/OND07/Raw data/GENEActiv/OND07_WTL_3001_02_GA_LAnkle.bin"
+
+"""bin_file = ReadGENEActivBin(file)
+pre_processed = pre_process(bin_file)
+indices = start_end_times(pre_processed)
+
+plt.plot(bin_file.x_channel)
+plt.plot([1125 * i for i in range(len(pre_processed))], pre_processed)
+plt.show()
+
+print("Hello World")"""
 
 
 '''t0 = datetime.now()
