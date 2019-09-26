@@ -131,18 +131,18 @@ def temp_check(starts, ends, temperatures, times):
 
     non_wear_start = []
     non_wear_end = []
-
     curr_temps = []
+
     for i in range(len(starts)):
         start_index = int(np.where(times == starts[i])[0])//300
         end_index = int(np.where(times == ends[i])[0])//300
-        indices = np.array(j for j in range(start_index, end_index))
+        indices = np.array([j for j in range(start_index, end_index)])
         curr_temps = np.array(temperatures[start_index:end_index])
 
         m = (statistics.mean(curr_temps) * statistics.mean(indices) - statistics.mean(curr_temps * indices))
         print(m)
 
-        if m < 1:
+        if m < -10:
             non_wear_start.append(starts[i])
             non_wear_end.append(ends[i])
 
@@ -182,7 +182,7 @@ start_arr, end_arr = find_gaps(times, filtered)
 print("Finding Standard Deviation of Gaps... this might take a while")
 filt_start, filt_end = collapse_gaps(start_arr, end_arr, times, svms)
 
-
+print("Conducting Temperature Checks")
 start, end = temp_check(filt_start, filt_end, bin_file.temperatures, times)
 
 print("Plotting...")
