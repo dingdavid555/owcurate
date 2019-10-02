@@ -261,6 +261,7 @@ class ReadGENEActivBin:
                           self.fileInfo.z_gain, self.fileInfo.z_offset,
                           self.fileInfo.volts, self.fileInfo.lux]
         self.actual_page_count = get_last_sequence_num(self.file_instance_2)
+        self.file_instance_2.close()
         self.DataChunk = []
         self.x_channel = []
         self.y_channel = []

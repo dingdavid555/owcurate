@@ -1,6 +1,6 @@
 # David Ding
 
-from Python.GENEActiv.GENEActivReader import *
+from owcurate.Python.GENEActiv.GENEActivReader import *
 from fpdf import FPDF
 import matplotlib.pyplot as plt
 from matplotlib import style

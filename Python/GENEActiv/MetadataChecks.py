@@ -4,7 +4,7 @@
 # WORK IN PROGRESS
 
 # ======================================== IMPORTS =============================
-from Python.GENEActiv.GENEActivReader import *
+from owcurate.Python.GENEActiv.GENEActivReader import *
 import pandas as pd
 from os import listdir, remove
 from os.path import isfile, join
