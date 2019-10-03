@@ -8,7 +8,7 @@
 # ======================================== IMPORTS ========================================
 import numpy as np
 import pandas as pd
-from owcurate.Python.GENEActiv.GENEActivReader import *
+from Python.GENEActiv.GENEActivReader import *
 import matplotlib.pyplot as plt
 import statistics
 from math import *
@@ -22,12 +22,9 @@ from os.path import isfile, join
 # returns one list of all the SVM values for each sample
 # calculate_svms (list(float), list(float), list(float)) --> np.ndarray
 def calculate_svms(x_channel, y_channel, z_channel):
-    t0 = datetime.now()
     output_arr = np.zeros(len(x_channel))
     for i in range(len(x_channel)):
         output_arr[i] = sqrt(pow(x_channel[i], 2) + pow(y_channel[i], 2) + pow(z_channel[i], 2)) - 1
-    t1 = datetime.now()
-    print("Done Calculating SVMs. Took {} seconds".format(round((t1-t0).seconds), 1))
     return output_arr
 
 
@@ -35,7 +32,6 @@ def calculate_svms(x_channel, y_channel, z_channel):
 # returns an array of same length as inputted but of filtered data (Filter Process Part 1)
 # filter_svms (np.ndarray) --> np.ndarray
 def filter_svms(svm_array):
-    t0 = datetime.now()
     output_arr = np.zeros(len(svm_array))
     for i in range(len(svm_array)):
         if svm_array[i] < 0.5:
@@ -43,8 +39,6 @@ def filter_svms(svm_array):
         else:
             output_arr[i] = svm_array[i]
 
-    t1 = datetime.now()
-    print("Done Filtering. Took {} seconds".format(round((t1-t0).seconds), 1))
     return output_arr
 
 
@@ -52,7 +46,6 @@ def filter_svms(svm_array):
 # returns the start and end indices of the gap periods (stationary activity) (Filter Process Part 2)
 # find_gaps (np.ndarray, np.ndarray) --> np.ndarray
 def find_gaps(times, svm_array):
-    t0 = datetime.now()
     start_array = []
     end_array = []
     curr_stat = False
@@ -71,7 +64,6 @@ def find_gaps(times, svm_array):
     end_array = end_array[1:-1]
 
     t1 = datetime.now()
-    print("Done finding gaps. Took {} seconds".format(round((t1-t0).seconds), 1))
     print("%i gaps found" % len(start_array))
 
     return start_array, end_array
@@ -79,8 +71,6 @@ def find_gaps(times, svm_array):
 
 # collapse_gaps removes any gaps less than 1 minute in duration (Filter Process Part 3)
 def collapse_gaps(start_array, end_array, times, svms, mins1, mins2):
-    print("Starting with %i gaps" % len(start_array))
-    t0 = datetime.now()
     # Duration Check
     new_start = []
     new_end = []
@@ -122,15 +112,11 @@ def collapse_gaps(start_array, end_array, times, svms, mins1, mins2):
             processed_end.append(pre_process_end[i])
     print("After Ending Window Check: %i gaps remaining" % len(processed_start))
 
-    t1 = datetime.now()
-    print("Done Collapsing. Took {} seconds".format(round((t1 - t0).seconds), 1))
-
     return processed_start, processed_end
 
 
 # temp_check checks the linear regression slope for the temperatures between gaps
 def temp_check(starts, ends, temperatures, times):
-    t0 = datetime.now()
     non_wear_start = []
     non_wear_end = []
     curr_temps = []
@@ -148,8 +134,5 @@ def temp_check(starts, ends, temperatures, times):
             non_wear_end.append(ends[i])
 
     print("After Temperature Checking: %i periods of potential non-wear remaining" % len(non_wear_start))
-
-    t1 = datetime.now()
-    print("Done Temperature Checks. Took {} seconds".format(round((t1 - t0).seconds), 1))
 
     return non_wear_start, non_wear_end
