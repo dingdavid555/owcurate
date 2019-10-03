@@ -93,8 +93,10 @@ for f in files:
     for i in range(len(start)):
         ax.axvline(start[i], -10, 10, c="red")
         ax.axvline(end[i], -10, 10, c="green")
-        out.write("%i,%s,%s,%s,%s\n" %(len(df), bin_file.fileInfo.subject_code, bin_file.fileInfo.location_code,
-                                     start[i].strftime("%m/%d/%Y %H:%M:%S%f"), end[i].strftime("%m/%d/%Y %H:%M:%S%f")))
+        out.write("%i,%s,%s,%s,%s\n" % (len(df), bin_file.fileInfo.subject_code,
+                                        bin_file.fileInfo.location_code,
+                                        start[i].strftime("%m/%d/%Y %H:%M:%S%f"),
+                                        end[i].strftime("%m/%d/%Y %H:%M:%S%f")))
         df.loc[len(df)] = [bin_file.fileInfo.subject_code, bin_file.fileInfo.location_code, start[i], end[i]]
         total_len += end[i]-start[i]
 
