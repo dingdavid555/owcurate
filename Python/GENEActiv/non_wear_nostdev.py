@@ -5,7 +5,7 @@
 # ================================================================================
 
 # IMPORTS
-from Python.GENEActiv.nonwear import *
+from Python.GENEActiv.non_wear_nostdev2 import *
 
 # ======================================== MAIN ========================================
 # Runs through the Data Pipeline to process for non-wear time
@@ -13,19 +13,21 @@ from Python.GENEActiv.nonwear import *
 
 register_matplotlib_converters()
 
-output_dir = "O:\\Data\\ReMiNDD\\Processed Data\\GENEActiv\\Non-wear\\"
-input_dir = "O:\\Data\\ReMiNDD\\Raw data\\GENEActiv\\"
+output_dir = "C:\\Users\\y259ding\\Desktop\\presfiles\\Data\\"
+input_dir = "C:\\Users\\y259ding\\Desktop\\presfiles\\"
 files = [f for f in listdir(input_dir) if isfile(join(input_dir, f))]
 
 
 try:
-    with open(output_dir+"Summary.csv") as out:
+    with open(output_dir+"Filtered.csv", "a") as out:
         df = pd.read_csv(out, names=["Index", "SubjectID", "DeviceLocation", "StartTime", "EndTime"],
                          header=0, index_col=["Index"])
 except IOError:
-    with open(output_dir+"Summary.csv", 'w') as out:
+    with open(output_dir+"Filtered.csv", 'w') as out:
         out.write("Index,SubjectID,DeviceLocation,StartTime,EndTime\n")
         df = pd.DataFrame(columns=["SubjectID", "Location", "StartTime", "EndTime"], index=["Index"])
+
+out = open(output_dir+"Filtered.csv", 'a')
 
 
 for f in files:
@@ -88,11 +90,10 @@ for f in files:
     ax.set_title(file)
     ax.plot(times, bin_file.x_channel, "black", linewidth=0.3)
 
-    out = open(output_dir+"Summary.csv", 'a')
     total_len = timedelta()
-    for i in range(len(start)):
-        ax.axvline(start[i], -10, 10, c="red")
-        ax.axvline(end[i], -10, 10, c="green")
+    for i in range(len(filt_start)):
+        ax.axvline(filt_start[i], -10, 10, c="red")
+        ax.axvline(filt_end[i], -10, 10, c="green")
         out.write("%i,%s,%s,%s,%s\n" % (len(df), bin_file.fileInfo.subject_code,
                                         bin_file.fileInfo.location_code,
                                         start[i].strftime("%m/%d/%Y %H:%M:%S%f"),
@@ -105,9 +106,6 @@ for f in files:
     total_time = timedelta(hours=bin_file.fileInfo.measurement_period)
     percent_non_wear = (total_len / total_time) * 100
 
-    # df.to_csv(output_dir + f[:-4] + ".csv")
-
     bin_file.file_instance_2.close()
     bin_file.file.close()
-    out.close()
 
