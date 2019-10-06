@@ -5,7 +5,7 @@
 # ================================================================================
 
 # IMPORTS
-from Python.GENEActiv.non_wear_nostdev2 import *
+from Python.GENEActiv.nonwear import *
 
 # ======================================== MAIN ========================================
 # Runs through the Data Pipeline to process for non-wear time
@@ -13,24 +13,23 @@ from Python.GENEActiv.non_wear_nostdev2 import *
 
 register_matplotlib_converters()
 
-output_dir = "C:\\Users\\y259ding\\Desktop\\presfiles\\Data\\"
-input_dir = "C:\\Users\\y259ding\\Desktop\\presfiles\\"
+output_dir = "C:\\Users\\y259ding\\Desktop\\8output\\"
+input_dir = "C:\\Users\\y259ding\\Desktop\\RawFiles\\"
 files = [f for f in listdir(input_dir) if isfile(join(input_dir, f))]
 
 
 try:
-    with open(output_dir+"Filtered.csv", "a") as out:
-        df = pd.read_csv(out, names=["Index", "SubjectID", "DeviceLocation", "StartTime", "EndTime"],
-                         header=0, index_col=["Index"])
+    with open(output_dir+"Summary.csv", 'r') as out:
+        df = pd.read_csv(out, names=["SubjectID", "DeviceLocation", "StartTime", "EndTime"])
 except IOError:
-    with open(output_dir+"Filtered.csv", 'w') as out:
+    print("IOERROR")
+    with open(output_dir+"Summary.csv", 'w') as out:
         out.write("Index,SubjectID,DeviceLocation,StartTime,EndTime\n")
         df = pd.DataFrame(columns=["SubjectID", "Location", "StartTime", "EndTime"], index=["Index"])
 
-out = open(output_dir+"Filtered.csv", 'a')
+out = open(output_dir+"Summary.csv", 'a')
 
-
-for f in files:
+for f in files[1:]:
     file = join(input_dir, f)
 
     t0 = datetime.now()
@@ -91,13 +90,14 @@ for f in files:
     ax.plot(times, bin_file.x_channel, "black", linewidth=0.3)
 
     total_len = timedelta()
-    for i in range(len(filt_start)):
-        ax.axvline(filt_start[i], -10, 10, c="red")
-        ax.axvline(filt_end[i], -10, 10, c="green")
+
+    for i in range(len(start)):
+        ax.axvline(start[i], -10, 10, c="red")
+        ax.axvline(end[i], -10, 10, c="green")
         out.write("%i,%s,%s,%s,%s\n" % (len(df), bin_file.fileInfo.subject_code,
                                         bin_file.fileInfo.location_code,
-                                        start[i].strftime("%m/%d/%Y %H:%M:%S%f"),
-                                        end[i].strftime("%m/%d/%Y %H:%M:%S%f")))
+                                        start[i].strftime("%m/%d/%Y %H:%M:%S.%f"),
+                                        end[i].strftime("%m/%d/%Y %H:%M:%S.%f")))
         df.loc[len(df)] = [bin_file.fileInfo.subject_code, bin_file.fileInfo.location_code, start[i], end[i]]
         total_len += end[i]-start[i]
 
@@ -108,4 +108,9 @@ for f in files:
 
     bin_file.file_instance_2.close()
     bin_file.file.close()
+
+    del bin_file
+
+
+df.to_csv(output_dir+"DF.csv")
 

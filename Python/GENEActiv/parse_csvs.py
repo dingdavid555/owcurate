@@ -1,7 +1,7 @@
 from Python.GENEActiv.nonwear import *
 
-output_path = "C:\\Users\\y259ding\\Desktop\\presfiles\\Data\\"
-input_path = "C:\\Users\\y259ding\\Desktop\\presfiles\\"
+output_path = "C:\\Users\\y259ding\\Desktop\\OND07\\Parsed\\"
+input_path = "C:\\Users\\y259ding\\Desktop\\OND07\\"
 
 
 files = [f for f in listdir(input_path) if isfile(join(input_path, f))]
@@ -28,5 +28,5 @@ for f in files:
                                                 Bin_file.fileInfo.location_code))
 
     with open(output_path+"Starts.txt", "a") as out:
-        out.write("%s, %s\n" % (f, Bin_file.fileInfo.start_time.strftime("%m/%d/%Y %H:%M:%S%f")))
+        out.write("%s, %s\n" % (f, Bin_file.fileInfo.start_time.strftime("%m/%d/%Y %H:%M:%S:%f")))
 
