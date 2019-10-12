@@ -1,10 +1,13 @@
-from Python.GENEActiv.nonwear import *
+from Python.GENEActiv.GENEActivReader import *
+from os import listdir
+from os.path import isfile, join
 
-output_path = "C:\\Users\\y259ding\\Desktop\\OND07\\Parsed\\"
-input_path = "C:\\Users\\y259ding\\Desktop\\OND07\\"
+output_path = input("enter output directory: ")
+input_path = input("enter input directory: ")
 
 
 files = [f for f in listdir(input_path) if isfile(join(input_path, f))]
+files.sort()
 
 for f in files:
     print("Reading file %s" % f)
@@ -27,6 +30,4 @@ for f in files:
     temps.tofile("%s%i_%s_temps.bin" % (output_path, Bin_file.fileInfo.subject_code,
                                                 Bin_file.fileInfo.location_code))
 
-    with open(output_path+"Starts.txt", "a") as out:
-        out.write("%s, %s\n" % (f, Bin_file.fileInfo.start_time.strftime("%m/%d/%Y %H:%M:%S:%f")))
 
